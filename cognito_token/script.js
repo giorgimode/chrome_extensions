@@ -6,10 +6,10 @@ DisplayButton.addEventListener('click', async () => {
         if (token && (tokenElement.style.display === "none" || tokenElement.style.display === '')) {
             tokenElement.style.display = "block";
             tokenElement.innerHTML = token;
-            this.innerHTML = "Hide Token";
+            DisplayButton.innerHTML = "Hide Token";
         } else {
             tokenElement.style.display = "none";
-            this.innerHTML = "Show Token";
+            DisplayButton.innerHTML = "Show Token";
         }
     });
 })
@@ -38,7 +38,7 @@ function storeToken() {
     for (const key of Object.keys(window.localStorage)) {
         if (key.startsWith("CognitoIdentityServiceProvider") && key.endsWith("accessToken")) {
             chrome.storage.sync.set({"token": localStorage.getItem(key)},
-                () => chrome.runtime.sendMessage({type: "UPDATE_SUCCESSFUL"}));
+                () => chrome.runtime.sendMessage({token: localStorage.getItem(key)}));
             return;
         }
     }
@@ -48,7 +48,10 @@ function storeToken() {
 
 chrome.runtime.onMessage.addListener(
     function(request, sender, sendResponse) {
-        if (request.type === "UPDATE_SUCCESSFUL") UpdateTokenButton.innerHTML = "Token updated";
+        if (request.token) {
+            navigator.clipboard.writeText(request.token);
+            UpdateTokenButton.innerHTML = "Token updated & copied";
+        }
         else if (request.type === "UPDATE_FAILED") UpdateTokenButton.innerHTML = "Token not found";
     });
 
