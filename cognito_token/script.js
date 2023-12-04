@@ -1,18 +1,19 @@
-const DisplayButton = document.getElementById('display');
-DisplayButton.addEventListener('click', async () => {
-    chrome.storage.sync.get(["token"], function (obj) {
-        var token = obj.token;
-        var tokenElement = document.getElementById("token");
-        if (token && (tokenElement.style.display === "none" || tokenElement.style.display === '')) {
-            tokenElement.style.display = "block";
-            tokenElement.innerHTML = token;
-            DisplayButton.innerHTML = "Hide Token";
-        } else {
-            tokenElement.style.display = "none";
-            DisplayButton.innerHTML = "Show Token";
-        }
-    });
-})
+const CognitoDefaults = {username: "test_user", password: "test_password", cognitoClientId: "test_cognito_client"}
+chrome.storage.sync.get(["username", "password", "cognitoClientId"], function (obj) {
+    if (!obj.username) {
+        chrome.storage.sync.set({"username": CognitoDefaults.username});
+    }
+    if (!obj.password) {
+        chrome.storage.sync.set({"password": CognitoDefaults.password});
+    }
+    if (!obj.cognitoClientId) {
+        chrome.storage.sync.set({"cognitoClientId": CognitoDefaults.cognitoClientId});
+    }
+});
+
+const ConfigurationButton = document.getElementById('configure');
+ConfigurationButton.addEventListener('click', async () =>
+    chrome.storage.sync.get(["username", "password", "cognitoClientId"], obj => configureCognito(obj)))
 
 const CopyButton = document.getElementById('copy');
 CopyButton.addEventListener('click', async () => {
@@ -20,39 +21,79 @@ CopyButton.addEventListener('click', async () => {
         var token = obj.token;
         if (token) {
             navigator.clipboard.writeText(token);
-            CopyButton.innerHTML = "Token copied";
-        } else CopyButton.innerHTML = "Token not found";
+            CopyButton.innerHTML = "Copied";
+        } else {
+            CopyButton.innerHTML = "No token";
+        }
     });
 })
 
-let UpdateTokenButton = document.getElementById("update");
+const UpdateTokenButton = document.getElementById("update");
 UpdateTokenButton.addEventListener("click", async () => {
-    let [tab] = await chrome.tabs.query({active: true, currentWindow: true});
-    chrome.scripting.executeScript({
-        target: {tabId: tab.id},
-        function: storeToken,
-    });
+    refreshToken();
 });
 
-function storeToken() {
-    for (const key of Object.keys(window.localStorage)) {
-        if (key.startsWith("CognitoIdentityServiceProvider") && key.endsWith("accessToken")) {
-            chrome.storage.sync.set({"token": localStorage.getItem(key)},
-                () => chrome.runtime.sendMessage({token: localStorage.getItem(key)}));
-            return;
+function configureCognito(obj) {
+    var configurationElement = document.getElementById("configuration");
+    if (configurationElement.style.display === "none") {
+        configurationElement.style.display = "block";
+        ConfigurationButton.innerHTML = "Save";
+        if (obj.username) {
+            document.getElementById("username").value = obj.username
+        }
+        if (obj.password) {
+            document.getElementById("password").value = obj.password
+        }
+        if (obj.cognitoClientId) {
+            document.getElementById("cognitoClientId").value = obj.cognitoClientId
+        }
+    } else {
+        configurationElement.style.display = "none";
+        ConfigurationButton.innerHTML = "Configure";
+        let updatedUsername = document.getElementById("username").value.trim();
+        if (updatedUsername) {
+            chrome.storage.sync.set({"username": updatedUsername});
+        }
+        let updatedPassword = document.getElementById("password").value.trim();
+        if (updatedPassword) {
+            chrome.storage.sync.set({"password": updatedPassword});
+        }
+        let updatedClientId = document.getElementById("cognitoClientId").value.trim();
+        if (updatedClientId) {
+            chrome.storage.sync.set({"cognitoClientId": updatedClientId});
         }
     }
-    chrome.storage.sync.remove("token");
-    chrome.runtime.sendMessage({type: "UPDATE_FAILED"});
 }
 
-chrome.runtime.onMessage.addListener(
-    function(request, sender, sendResponse) {
-        if (request.token) {
-            navigator.clipboard.writeText(request.token);
-            UpdateTokenButton.innerHTML = "Token updated & copied";
-        }
-        else if (request.type === "UPDATE_FAILED") UpdateTokenButton.innerHTML = "Token not found";
+function refreshToken() {
+    chrome.storage.sync.get(["username", "password", "cognitoClientId"], function (obj) {
+        fetch("https://cognito-idp.eu-central-1.amazonaws.com/", {
+            method: "POST",
+            body: JSON.stringify({
+                ClientId: obj.cognitoClientId,
+                AuthFlow: "USER_PASSWORD_AUTH",
+                AuthParameters: {
+                    USERNAME: obj.username,
+                    PASSWORD: obj.password
+                }
+            }),
+            headers: {
+                "Content-type": "application/x-amz-json-1.1",
+                "X-Amz-Target": "AWSCognitoIdentityProviderService.InitiateAuth"
+            }
+        }).then(response => {
+            if (response.ok) {
+                return response.json()
+            }
+            return Promise.reject(response)
+        }).then(response => chrome.storage.sync.set({"token": response.AuthenticationResult.AccessToken},
+            () => {
+                navigator.clipboard.writeText(response.AuthenticationResult.AccessToken)
+                UpdateTokenButton.innerHTML = "Refreshed";
+            }))
+        .catch((error) => {
+            UpdateTokenButton.innerHTML = "Failed";
+        });
     });
-
+}
 
