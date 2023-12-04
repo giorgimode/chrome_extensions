@@ -1,14 +1,11 @@
 {
-  "name": "Cognito Token",
+  "name": "AWS Cognito Token",
   "version": "1.0.0",
-  "description": "Get cognito token from local storage",
+  "description": "Retrieve AWS Cognito Access Token",
   "manifest_version": 3,
   "author": "Giorgi Modebadze",
   "permissions": [
-    "storage",
-    "scripting",
-    "activeTab",
-    "nativeMessaging"
+    "storage"
   ],
   "icons": {
     "16": "icons/icon16.png",
@@ -18,6 +15,6 @@
   },
   "action": {
     "default_popup": "index.html",
-    "default_title": "Cognito token"
+    "default_title": "AWS Cognito access token"
   }
 }
