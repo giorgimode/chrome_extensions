@@ -43,6 +43,8 @@ for (const env of environments) {
     function configureCognito(obj) {
         var configurationElement = document.getElementById("configuration_" + env);
         if (configurationElement.style.display === "none") {
+            ConfigurationButton.closest("ul").classList.add( 'configuration-open' )
+            ConfigurationButton.closest("li").classList.add( 'configuration-open' )
             configurationElement.style.display = "block";
             ConfigurationButton.innerHTML = "Save";
             if (obj[usernameKey]) {
@@ -55,6 +57,8 @@ for (const env of environments) {
                 document.getElementById(cognitoClientIdKey).value = obj[cognitoClientIdKey]
             }
         } else {
+            ConfigurationButton.closest("ul").classList.remove( 'configuration-open' )
+            ConfigurationButton.closest("li").classList.remove( 'configuration-open' )
             configurationElement.style.display = "none";
             ConfigurationButton.innerHTML = "Configure";
             let updatedUsername = document.getElementById(usernameKey).value.trim();

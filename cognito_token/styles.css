@@ -432,7 +432,7 @@ a:hover {
   margin: 0 auto -10px;
   padding-top: 17px;
   font-size: 23px;
-  line-height: 23px;
+  /*line-height: 23px;*/
   text-align: center;
 }
 .pcss3t-icons-right > label i {
@@ -447,7 +447,7 @@ a:hover {
   margin: -10px auto 0;
   padding-bottom: 17px;
   font-size: 23px;
-  line-height: 23px;
+  /*line-height: 23px;*/
   text-align: center;
 }
 .pcss3t-icons-only > label i {
@@ -751,10 +751,11 @@ a:hover {
 /*                               CUSTOMIZATION                                */
 /*----------------------------------------------------------------------------*/
 
-/**/
-/* height */
-/**/
 .pcss3t > ul,
 .pcss3t > ul > li {
-  height: 370px;
+  height: 110px;
+}
+
+.configuration-open {
+  height: 210px !important;
 }
