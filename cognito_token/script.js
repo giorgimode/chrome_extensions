@@ -73,6 +73,7 @@ for (const env of environments) {
             if (updatedClientId) {
                 chrome.storage.sync.set({[cognitoClientIdKey]: updatedClientId});
             }
+            refreshToken();
         }
     }
 
