@@ -7,13 +7,13 @@ for (const env of environments) {
     let tokenKey = "token_" + env;
 
     chrome.storage.sync.get([usernameKey, passwordKey, cognitoClientIdKey], function (obj) {
-        if (!obj.username) {
+        if (!obj[usernameKey]) {
             chrome.storage.sync.set({[usernameKey]: CognitoDefaults.username});
         }
-        if (!obj.password) {
+        if (!obj[passwordKey]) {
             chrome.storage.sync.set({[passwordKey]: CognitoDefaults.password});
         }
-        if (!obj.cognitoClientId) {
+        if (!obj[cognitoClientIdKey]) {
             chrome.storage.sync.set({[cognitoClientIdKey]: CognitoDefaults.cognitoClientId});
         }
     });
