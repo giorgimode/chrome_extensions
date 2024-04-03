@@ -4,40 +4,125 @@
     <title>Cognito Access Token</title>
     <meta charset="utf-8">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/3.2.1/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body style="width: 280px;">
 <br/>
-<div class="container">
-    <h6 class="text-center">AWS Cognito Access Token</h6>
-    <div class="col text-center">
-        <button class="btn btn-primary" id="copy">Copy Token</button>
-        <button type="button" class="btn btn-info" id="update">Refresh Token</button>
-    </div>
-    <br/>
-    <div class="col text-center">
-        <button type="button" class="btn btn-secondary btn-sm" id="configure">Configure</button>
-    </div>
-    <br/>
-    <div id="configuration" style="display:none">
-        <div class="form-group row">
-            <div class="input-sm">
-                <label for="username" class="col-sm-2 col-form-label col-form-label-sm" style="min-width: 12px;">Username</label>
-                <input type="text" class="input-sm" id="username">
-            </div>
-        </div>
-        <div class="form-group row">
-            <div class="col-sm-10">
-                <label for="password" class="col-sm-2 col-form-label col-form-label-sm" style="min-width: 66px;">Password</label>
-                <input type="text" class="input-sm" id="password">
-            </div>
-        </div>
-        <div class="form-group row">
-            <div class="col-sm-10">
-                <label for="cognitoClientId" class="col-sm-2 col-form-label col-form-label-sm" style="min-width: 66px;">ClientId</label>
-                <input type="text" class="input-sm" id="cognitoClientId">
-            </div>
-        </div>
-        <br/>
+<div class="page">
+    <div class="text-center">AWS Cognito Access Token</div>
+    <div class="pcss3t pcss3t-effect-scale pcss3t-theme-1">
+        <input type="radio" name="pcss3t" checked id="tab1" class="tab-content-first">
+        <label for="tab1"><i class="icon-bug"></i>Dev</label>
+
+        <input type="radio" name="pcss3t" id="tab2" class="tab-content-2">
+        <label for="tab2"><i class="icon-beaker"></i>QA</label>
+
+        <input type="radio" name="pcss3t" id="tab5" class="tab-content-last">
+        <label for="tab5"><i class="icon-group"></i>Prod</label>
+
+        <ul>
+            <li class="tab-content tab-content-first typography">
+                <div class="col text-center">
+                    <button class="btn btn-primary" id="copy_dev">Copy Token</button>
+                    <button type="button" class="btn btn-info" id="update_dev">Refresh Token</button>
+                </div>
+                <br/>
+                <div class="col text-center">
+                    <button type="button" class="btn btn-secondary btn-sm" id="configure_dev">Configure</button>
+                </div>
+                <br/>
+                <div id="configuration_dev" style="display:none">
+                    <div class="form-group row">
+                        <div class="input-sm">
+                            <label for="username_dev" class="col-sm-2 col-form-label col-form-label-sm" style="min-width: 12px;">Username</label>
+                            <input type="text" class="input-sm" id="username_dev">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-sm-10">
+                            <label for="password_dev" class="col-sm-2 col-form-label col-form-label-sm" style="min-width: 66px;">Password</label>
+                            <input type="text" class="input-sm" id="password_dev">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-sm-10">
+                            <label for="cognitoClientId_dev" class="col-sm-2 col-form-label col-form-label-sm" style="min-width: 66px;">ClientId</label>
+                            <input type="text" class="input-sm" id="cognitoClientId_dev">
+                        </div>
+                    </div>
+                    <br/>
+                </div>
+            </li>
+
+            <li class="tab-content tab-content-2 typography">
+
+                <div class="col text-center">
+                    <button class="btn btn-primary" id="copy_qa">Copy Token</button>
+                    <button type="button" class="btn btn-info" id="update_qa">Refresh Token</button>
+                </div>
+                <br/>
+                <div class="col text-center">
+                    <button type="button" class="btn btn-secondary btn-sm" id="configure_qa">Configure</button>
+                </div>
+                <br/>
+                <div id="configuration_qa" style="display:none">
+                    <div class="form-group row">
+                        <div class="input-sm">
+                            <label for="username_qa" class="col-sm-2 col-form-label col-form-label-sm" style="min-width: 12px;">Username</label>
+                            <input type="text" class="input-sm" id="username_qa">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-sm-10">
+                            <label for="password_qa" class="col-sm-2 col-form-label col-form-label-sm" style="min-width: 66px;">Password</label>
+                            <input type="text" class="input-sm" id="password_qa">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-sm-10">
+                            <label for="cognitoClientId_qa" class="col-sm-2 col-form-label col-form-label-sm" style="min-width: 66px;">ClientId</label>
+                            <input type="text" class="input-sm" id="cognitoClientId_qa">
+                        </div>
+                    </div>
+                    <br/>
+                </div>
+
+            </li>
+
+            <li class="tab-content tab-content-last typography">
+                <div class="col text-center">
+                    <button class="btn btn-primary" id="copy_prod">Copy Token</button>
+                    <button type="button" class="btn btn-info" id="update_prod">Refresh Token</button>
+                </div>
+                <br/>
+                <div class="col text-center">
+                    <button type="button" class="btn btn-secondary btn-sm" id="configure_prod">Configure</button>
+                </div>
+                <br/>
+                <div id="configuration_prod" style="display:none">
+                    <div class="form-group row">
+                        <div class="input-sm">
+                            <label for="username_prod" class="col-sm-2 col-form-label col-form-label-sm" style="min-width: 12px;">Username</label>
+                            <input type="text" class="input-sm" id="username_prod">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-sm-10">
+                            <label for="password_prod" class="col-sm-2 col-form-label col-form-label-sm" style="min-width: 66px;">Password</label>
+                            <input type="text" class="input-sm" id="password_prod">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-sm-10">
+                            <label for="cognitoClientId_prod" class="col-sm-2 col-form-label col-form-label-sm" style="min-width: 66px;">ClientId</label>
+                            <input type="text" class="input-sm" id="cognitoClientId_prod">
+                        </div>
+                    </div>
+                    <br/>
+                </div>
+            </li>
+        </ul>
     </div>
 </div>
 </body>
