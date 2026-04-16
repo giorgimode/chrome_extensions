@@ -1,0 +1,15 @@
+{
+  "manifest_version": 3,
+  "name": "Auto Tab Closer",
+  "version": "1.0",
+  "description": "Automatically closes tabs matching configurable URL and content patterns",
+  "permissions": ["tabs", "storage", "scripting", "webNavigation"],
+  "host_permissions": ["<all_urls>"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Auto Tab Closer"
+  }
+}
